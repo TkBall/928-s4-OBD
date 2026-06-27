@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Porsche928Diagnostics.Tests/Porsche928Diagnostics.Tests.csproj" />
+  <Project Path="Porsche928Diagnostics/Porsche928Diagnostics.csproj" />
+</Solution>
