@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Porsche928Diagnostics.Models;
@@ -14,6 +15,7 @@ public partial class AirbagViewModel : ViewModelBase
 
     public ObservableCollection<DiagnosticTroubleCode> Dtcs { get; } = [];
 
+    [ObservableProperty] private bool _isSessionActive;
     [ObservableProperty] private string _ecuId = "Not read";
     [ObservableProperty] private string _downtimeClock = "Not read";
     [ObservableProperty] private bool _crashEventRecorded;
@@ -33,6 +35,7 @@ public partial class AirbagViewModel : ViewModelBase
         await _session.InitializeAsync(_module.EcuAddress);
         var id = await _module.ReadEcuIdentificationAsync();
         EcuId = id.ToString();
+        IsSessionActive = true;
         SetStatus($"Airbag ECU connected: {id}");
     }, "Initializing Airbag session...");
 
@@ -46,12 +49,24 @@ public partial class AirbagViewModel : ViewModelBase
     });
 
     [RelayCommand]
-    private async Task ClearDtcsAsync() => await RunBusyAsync(async () =>
+    private async Task ClearDtcsAsync()
     {
-        await _module.ClearDtcsAsync();
-        Dtcs.Clear();
-        SetStatus("Airbag fault codes cleared.");
-    });
+        if (!Confirm("Clear all fault codes from Airbag ECU non-volatile RAM?\nThis cannot be undone.", "Clear Fault Codes")) return;
+        await RunBusyAsync(async () =>
+        {
+            await _module.ClearDtcsAsync();
+            Dtcs.Clear();
+            SetStatus("Airbag fault codes cleared.");
+        });
+    }
+
+    [RelayCommand]
+    private void CopyDtcs()
+    {
+        if (Dtcs.Count == 0) { SetStatus("No fault codes to copy."); return; }
+        CopyToClipboard(string.Join(Environment.NewLine, Dtcs.Select(d => d.ToString())));
+        SetStatus($"{Dtcs.Count} fault code(s) copied to clipboard.");
+    }
 
     [RelayCommand]
     private async Task ReadAirbagDataAsync() => await RunBusyAsync(async () =>

@@ -13,6 +13,18 @@ public abstract partial class ViewModelBase : ObservableObject
     [ObservableProperty]
     private bool _hasError;
 
+    protected static bool Confirm(string message, string title = "Confirm")
+    {
+        var result = System.Windows.MessageBox.Show(
+            message, title,
+            System.Windows.MessageBoxButton.YesNo,
+            System.Windows.MessageBoxImage.Warning);
+        return result == System.Windows.MessageBoxResult.Yes;
+    }
+
+    protected void CopyToClipboard(string text)
+        => System.Windows.Clipboard.SetText(text);
+
     protected void SetStatus(string message, bool isError = false)
     {
         StatusMessage = message;

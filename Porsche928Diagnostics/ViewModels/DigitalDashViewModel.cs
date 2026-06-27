@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Porsche928Diagnostics.Modules;
@@ -8,6 +9,16 @@ public partial class DigitalDashViewModel : ViewModelBase
 {
     private readonly DigitalDashModule _module;
     private CancellationTokenSource? _sequenceCts;
+
+    public ObservableCollection<ChecklistItemViewModel> Checklist { get; } = new()
+    {
+        new("Oil Pressure (bar) — Normal idle: 2.0–4.5 bar"),
+        new("Oil Level — Min approx 4.0 L"),
+        new("Brake Fluid Level — OK / LOW"),
+        new("Engine Temperature (°C)"),
+        new("Coolant Level — OK / LOW"),
+        new("TOOTHED BELT TENSION — OK / FAULT", isCritical: true),
+    };
 
     [ObservableProperty] private string _currentInstruction = "Press 'Start Guided Sequence' to begin.";
     [ObservableProperty] private int _currentStep;
@@ -49,5 +60,12 @@ public partial class DigitalDashViewModel : ViewModelBase
         _sequenceCts?.Cancel();
         SequenceRunning = false;
         SetStatus("Sequence stopped.");
+    }
+
+    [RelayCommand]
+    private void ResetChecklist()
+    {
+        foreach (var item in Checklist) item.IsChecked = false;
+        SetStatus("Checklist reset.");
     }
 }

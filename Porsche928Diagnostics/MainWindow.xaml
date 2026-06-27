@@ -3,75 +3,147 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:Porsche928Diagnostics.Views"
         Title="Porsche 928 K-Line Diagnostic Tool — F57GNT"
-        Height="720" Width="1100"
-        Background="#1E1E1E" Foreground="#E8E8E8"
-        FontFamily="Segoe UI" FontSize="13">
-
-    <Window.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Background" Value="#2D2D2D"/>
-            <Setter Property="Foreground" Value="#E8E8E8"/>
-            <Setter Property="BorderBrush" Value="#555"/>
-            <Setter Property="Padding" Value="10,4"/>
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="Background" Value="#2D2D2D"/>
-            <Setter Property="Foreground" Value="#E8E8E8"/>
-        </Style>
-    </Window.Resources>
+        Height="740" Width="1160"
+        Background="#090909"
+        Foreground="#EEEEEE"
+        FontFamily="Segoe UI"
+        FontSize="13">
 
     <DockPanel>
 
-        <!-- Connection Bar -->
-        <Border DockPanel.Dock="Top" Background="#111" Padding="10,6"
-                BorderThickness="0,0,0,1" BorderBrush="#444">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="Port:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+        <!-- ── Connection toolbar ── -->
+        <Border DockPanel.Dock="Top"
+                Background="#090909"
+                BorderBrush="#1E1E1E"
+                BorderThickness="0,0,0,1"
+                Height="52">
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Margin="20,0">
+
+                <TextBlock Text="PORT"
+                           FontSize="10" FontWeight="SemiBold"
+                           Foreground="#3D3D3D"
+                           VerticalAlignment="Center"
+                           Margin="0,0,8,0"/>
                 <ComboBox ItemsSource="{Binding AvailablePorts}"
                           SelectedItem="{Binding SelectedPort}"
-                          Width="90" IsEnabled="{Binding IsDisconnected}"/>
-                <Button Content="Refresh" Command="{Binding RefreshPortsCommand}" Width="65"/>
-                <Button Content="Connect" Command="{Binding ConnectAsyncCommand}"
-                        Background="#1A5C2E" Foreground="White" Width="75"/>
-                <Button Content="Disconnect" Command="{Binding DisconnectCommand}"
-                        Background="#5C1A1A" Foreground="White" Width="90"/>
-                <Border Width="1" Background="#555" Margin="10,2"/>
-                <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center"
-                           Foreground="{Binding HasError, Converter={x:Static views:BoolToColorConverter.Instance}}"
-                           MaxWidth="500" TextTrimming="CharacterEllipsis"/>
-                <ProgressBar IsIndeterminate="{Binding IsBusy}" Width="80" Height="6"
-                             Margin="10,0,0,0"
+                          Width="100"
+                          IsEnabled="{Binding IsDisconnected}"/>
+                <Button Content="Refresh"
+                        Command="{Binding RefreshPortsCommand}"
+                        MinWidth="70" Margin="6,0,0,0"/>
+                <Button Content="Connect"
+                        Command="{Binding ConnectAsyncCommand}"
+                        Style="{StaticResource Btn.Primary}"
+                        MinWidth="88" Margin="6,0,0,0"/>
+                <Button Content="Disconnect"
+                        Command="{Binding DisconnectCommand}"
+                        Style="{StaticResource Btn.Danger}"
+                        MinWidth="100" Margin="6,0,0,0"/>
+
+                <Border Width="1" Background="#1E1E1E" Margin="16,10"/>
+
+                <TextBlock Text="{Binding StatusMessage}"
+                           Style="{StaticResource StatusText}"
+                           VerticalAlignment="Center"
+                           MaxWidth="560"
+                           TextTrimming="CharacterEllipsis"
+                           Foreground="{Binding HasError, Converter={x:Static views:BoolToColorConverter.Instance}}"/>
+
+                <ProgressBar IsIndeterminate="True"
+                             Width="80" Height="3"
+                             Margin="12,0,0,0"
+                             VerticalAlignment="Center"
                              Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisConverter}}"/>
             </StackPanel>
         </Border>
 
-        <!-- Module Tabs — disabled until connected -->
-        <TabControl Background="#1E1E1E" BorderThickness="0"
-                    IsEnabled="{Binding IsConnected}">
-            <TabItem Header="LH Injection (0x11)">
+        <!-- ── Module tabs ── -->
+        <TabControl IsEnabled="{Binding IsConnected}">
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse Width="6" Height="6" Margin="0,0,7,0" VerticalAlignment="Center"
+                                 Fill="{Binding DataContext.Lh.IsSessionActive,
+                                        RelativeSource={RelativeSource AncestorType=Window},
+                                        Converter={x:Static views:SessionDotConverter.Instance}}"/>
+                        <TextBlock Text="LH Injection"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <views:LhView DataContext="{Binding Lh}"/>
             </TabItem>
-            <TabItem Header="EZK Ignition (0x12)">
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse Width="6" Height="6" Margin="0,0,7,0" VerticalAlignment="Center"
+                                 Fill="{Binding DataContext.Ezk.IsSessionActive,
+                                        RelativeSource={RelativeSource AncestorType=Window},
+                                        Converter={x:Static views:SessionDotConverter.Instance}}"/>
+                        <TextBlock Text="EZK Ignition"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <views:EzkView DataContext="{Binding Ezk}"/>
             </TabItem>
-            <TabItem Header="PSD Differential (0x28)">
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse Width="6" Height="6" Margin="0,0,7,0" VerticalAlignment="Center"
+                                 Fill="{Binding DataContext.Psd.IsSessionActive,
+                                        RelativeSource={RelativeSource AncestorType=Window},
+                                        Converter={x:Static views:SessionDotConverter.Instance}}"/>
+                        <TextBlock Text="PSD Differential"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <views:PsdView DataContext="{Binding Psd}"/>
             </TabItem>
-            <TabItem Header="RDK Tyre Pressure (0x30)">
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse Width="6" Height="6" Margin="0,0,7,0" VerticalAlignment="Center"
+                                 Fill="{Binding DataContext.Rdk.IsSessionActive,
+                                        RelativeSource={RelativeSource AncestorType=Window},
+                                        Converter={x:Static views:SessionDotConverter.Instance}}"/>
+                        <TextBlock Text="RDK Tyres"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <views:RdkView DataContext="{Binding Rdk}"/>
             </TabItem>
-            <TabItem Header="Airbag (0x40)">
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse Width="6" Height="6" Margin="0,0,7,0" VerticalAlignment="Center"
+                                 Fill="{Binding DataContext.Airbag.IsSessionActive,
+                                        RelativeSource={RelativeSource AncestorType=Window},
+                                        Converter={x:Static views:SessionDotConverter.Instance}}"/>
+                        <TextBlock Text="Airbag"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <views:AirbagView DataContext="{Binding Airbag}"/>
             </TabItem>
-            <TabItem Header="Alarm (0x45)">
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse Width="6" Height="6" Margin="0,0,7,0" VerticalAlignment="Center"
+                                 Fill="{Binding DataContext.Alarm.IsSessionActive,
+                                        RelativeSource={RelativeSource AncestorType=Window},
+                                        Converter={x:Static views:SessionDotConverter.Instance}}"/>
+                        <TextBlock Text="Alarm"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <views:AlarmView DataContext="{Binding Alarm}"/>
             </TabItem>
+
             <TabItem Header="Digital Dash">
                 <views:DigitalDashView DataContext="{Binding DigitalDash}"/>
             </TabItem>
-        </TabControl>
 
+        </TabControl>
     </DockPanel>
 </Window>

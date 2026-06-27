@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Porsche928Diagnostics.Models;
@@ -15,6 +16,7 @@ public partial class AlarmViewModel : ViewModelBase
     public ObservableCollection<DiagnosticTroubleCode> Dtcs { get; } = [];
     public ObservableCollection<string> CountryCodeOptions { get; } = ["DE", "GB", "US", "FR", "IT", "JP"];
 
+    [ObservableProperty] private bool _isSessionActive;
     [ObservableProperty] private string _ecuId = "Not read";
     [ObservableProperty] private string _countryCode = "Unknown";
     [ObservableProperty] private string? _selectedCountryCode;
@@ -35,6 +37,7 @@ public partial class AlarmViewModel : ViewModelBase
         await _session.InitializeAsync(_module.EcuAddress);
         var id = await _module.ReadEcuIdentificationAsync();
         EcuId = id.ToString();
+        IsSessionActive = true;
         SetStatus($"Alarm ECU connected: {id}");
     }, "Initializing Alarm session...");
 
@@ -48,12 +51,24 @@ public partial class AlarmViewModel : ViewModelBase
     });
 
     [RelayCommand]
-    private async Task ClearDtcsAsync() => await RunBusyAsync(async () =>
+    private async Task ClearDtcsAsync()
     {
-        await _module.ClearDtcsAsync();
-        Dtcs.Clear();
-        SetStatus("Alarm fault codes cleared.");
-    });
+        if (!Confirm("Clear all fault codes from Alarm ECU non-volatile RAM?\nThis cannot be undone.", "Clear Fault Codes")) return;
+        await RunBusyAsync(async () =>
+        {
+            await _module.ClearDtcsAsync();
+            Dtcs.Clear();
+            SetStatus("Alarm fault codes cleared.");
+        });
+    }
+
+    [RelayCommand]
+    private void CopyDtcs()
+    {
+        if (Dtcs.Count == 0) { SetStatus("No fault codes to copy."); return; }
+        CopyToClipboard(string.Join(Environment.NewLine, Dtcs.Select(d => d.ToString())));
+        SetStatus($"{Dtcs.Count} fault code(s) copied to clipboard.");
+    }
 
     [RelayCommand]
     private async Task ReadAlarmDataAsync() => await RunBusyAsync(async () =>
@@ -68,13 +83,17 @@ public partial class AlarmViewModel : ViewModelBase
     }, "Reading alarm input states...");
 
     [RelayCommand]
-    private async Task SetCountryCodingAsync() => await RunBusyAsync(async () =>
+    private async Task SetCountryCodingAsync()
     {
         if (SelectedCountryCode is null) return;
-        await _module.SetCountryCodingAsync(SelectedCountryCode);
-        CountryCode = SelectedCountryCode;
-        SetStatus($"Country coding set to {SelectedCountryCode}.");
-    }, "Writing country coding...");
+        if (!Confirm($"Write country coding '{SelectedCountryCode}' to Alarm ECU?\nThis overwrites the current setting.", "Write Country Code")) return;
+        await RunBusyAsync(async () =>
+        {
+            await _module.SetCountryCodingAsync(SelectedCountryCode);
+            CountryCode = SelectedCountryCode;
+            SetStatus($"Country coding set to {SelectedCountryCode}.");
+        }, "Writing country coding...");
+    }
 
     [RelayCommand]
     private async Task ActivateHornAsync() => await RunBusyAsync(async () =>

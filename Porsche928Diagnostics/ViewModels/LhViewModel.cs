@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Porsche928Diagnostics.Models;
@@ -14,6 +15,7 @@ public partial class LhViewModel : ViewModelBase
 
     public ObservableCollection<DiagnosticTroubleCode> Dtcs { get; } = [];
 
+    [ObservableProperty] private bool _isSessionActive;
     [ObservableProperty] private string _ecuId = "Not read";
     [ObservableProperty] private double _batteryVoltage;
     [ObservableProperty] private double _engineTemperature;
@@ -37,6 +39,7 @@ public partial class LhViewModel : ViewModelBase
         await _session.InitializeAsync(_module.EcuAddress);
         var id = await _module.ReadEcuIdentificationAsync();
         EcuId = id.ToString();
+        IsSessionActive = true;
         SetStatus($"LH connected: {id}");
     }, "Initializing LH session...");
 
@@ -50,12 +53,24 @@ public partial class LhViewModel : ViewModelBase
     }, "Reading fault codes...");
 
     [RelayCommand]
-    private async Task ClearDtcsAsync() => await RunBusyAsync(async () =>
+    private async Task ClearDtcsAsync()
     {
-        await _module.ClearDtcsAsync();
-        Dtcs.Clear();
-        SetStatus("Fault codes cleared.");
-    }, "Clearing fault codes...");
+        if (!Confirm("Clear all fault codes from LH ECU non-volatile RAM?\nThis cannot be undone.", "Clear Fault Codes")) return;
+        await RunBusyAsync(async () =>
+        {
+            await _module.ClearDtcsAsync();
+            Dtcs.Clear();
+            SetStatus("Fault codes cleared.");
+        }, "Clearing fault codes...");
+    }
+
+    [RelayCommand]
+    private void CopyDtcs()
+    {
+        if (Dtcs.Count == 0) { SetStatus("No fault codes to copy."); return; }
+        CopyToClipboard(string.Join(Environment.NewLine, Dtcs.Select(d => d.ToString())));
+        SetStatus($"{Dtcs.Count} fault code(s) copied to clipboard.");
+    }
 
     [RelayCommand]
     private async Task ReadActualValuesAsync() => await RunBusyAsync(async () =>
