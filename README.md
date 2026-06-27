@@ -50,34 +50,17 @@ Windows 10 or Windows 11 with .NET 8 Desktop Runtime installed. The FTDI CDM dri
 
 ---
 
-## 2. Building and running
+## 2. Running the application
 
-### Prerequisites
-
-- .NET SDK 8 or later (`dotnet --version`)
-- Visual Studio 2022 or the `dotnet` CLI
-
-### Build
+The compiled application lives in the `publish` folder alongside this README. No installation and no .NET SDK are required — the runtime is bundled.
 
 ```
-dotnet build Porsche928Diagnostics.sln
+publish\Porsche928Diagnostics.exe
 ```
 
-### Run tests
+Double-click the exe, or run it from a terminal. Keep all files in the `publish` folder together — the WPF graphics DLLs alongside the exe are required and cannot be moved away from it.
 
-```
-dotnet test Porsche928Diagnostics.Tests/Porsche928Diagnostics.Tests.csproj
-```
-
-All 33 tests should pass. The tests run entirely in software using mock interfaces; no adapter or car is required.
-
-### Run the application
-
-```
-dotnet run --project Porsche928Diagnostics/Porsche928Diagnostics.csproj
-```
-
-Or open `Porsche928Diagnostics.sln` in Visual Studio and press F5.
+The application requires no installation and writes no registry entries. To uninstall, delete the folder.
 
 ---
 
