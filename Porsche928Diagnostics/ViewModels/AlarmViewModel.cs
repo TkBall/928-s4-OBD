@@ -39,7 +39,7 @@ public partial class AlarmViewModel : ViewModelBase
         EcuId = id.ToString();
         IsSessionActive = true;
         SetStatus($"Alarm ECU connected: {id}");
-    }, "Initializing Alarm session...");
+    }, _session, "Initializing Alarm session...");
 
     [RelayCommand]
     private async Task ReadDtcsAsync() => await RunBusyAsync(async () =>
@@ -48,7 +48,7 @@ public partial class AlarmViewModel : ViewModelBase
         Dtcs.Clear();
         foreach (var dtc in dtcs) Dtcs.Add(dtc);
         SetStatus(dtcs.Count == 0 ? "No alarm fault codes." : $"{dtcs.Count} fault code(s).");
-    });
+    }, _session);
 
     [RelayCommand]
     private async Task ClearDtcsAsync()
@@ -59,7 +59,7 @@ public partial class AlarmViewModel : ViewModelBase
             await _module.ClearDtcsAsync();
             Dtcs.Clear();
             SetStatus("Alarm fault codes cleared.");
-        });
+        }, _session);
     }
 
     [RelayCommand]
@@ -80,7 +80,7 @@ public partial class AlarmViewModel : ViewModelBase
         GloveBoxOpen = data.GloveCompartmentSwitchOpen;
         MotionSensorActive = data.InteriorMotionSensorActive;
         SetStatus($"Country: {data.CountryCode}  Engine lid: {(data.EngineLidSwitchOpen ? "OPEN" : "closed")}");
-    }, "Reading alarm input states...");
+    }, _session, "Reading alarm input states...");
 
     [RelayCommand]
     private async Task SetCountryCodingAsync()
@@ -92,7 +92,7 @@ public partial class AlarmViewModel : ViewModelBase
             await _module.SetCountryCodingAsync(SelectedCountryCode);
             CountryCode = SelectedCountryCode;
             SetStatus($"Country coding set to {SelectedCountryCode}.");
-        }, "Writing country coding...");
+        }, _session, "Writing country coding...");
     }
 
     [RelayCommand]
@@ -102,7 +102,7 @@ public partial class AlarmViewModel : ViewModelBase
         await Task.Delay(2000);
         await _module.StopDriveLinkAsync(AlarmDriveLink.Horn);
         SetStatus("Horn test complete.");
-    }, "Testing horn...");
+    }, _session, "Testing horn...");
 
     [RelayCommand]
     private async Task FlashIndicatorsAsync() => await RunBusyAsync(async () =>
@@ -111,5 +111,5 @@ public partial class AlarmViewModel : ViewModelBase
         await Task.Delay(3000);
         await _module.StopDriveLinkAsync(AlarmDriveLink.Indicators);
         SetStatus("Indicator test complete.");
-    }, "Flashing indicators...");
+    }, _session, "Flashing indicators...");
 }

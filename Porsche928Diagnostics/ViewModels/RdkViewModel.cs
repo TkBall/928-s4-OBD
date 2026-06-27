@@ -37,7 +37,7 @@ public partial class RdkViewModel : ViewModelBase
         EcuId = id.ToString();
         IsSessionActive = true;
         SetStatus($"RDK connected: {id}");
-    }, "Initializing RDK session...");
+    }, _session, "Initializing RDK session...");
 
     [RelayCommand]
     private async Task ReadDtcsAsync() => await RunBusyAsync(async () =>
@@ -46,7 +46,7 @@ public partial class RdkViewModel : ViewModelBase
         Dtcs.Clear();
         foreach (var dtc in dtcs) Dtcs.Add(dtc);
         SetStatus(dtcs.Count == 0 ? "No RDK fault codes." : $"{dtcs.Count} fault code(s).");
-    });
+    }, _session);
 
     [RelayCommand]
     private async Task ClearDtcsAsync()
@@ -57,7 +57,7 @@ public partial class RdkViewModel : ViewModelBase
             await _module.ClearDtcsAsync();
             Dtcs.Clear();
             SetStatus("RDK fault codes cleared.");
-        });
+        }, _session);
     }
 
     [RelayCommand]
@@ -79,5 +79,5 @@ public partial class RdkViewModel : ViewModelBase
         HfReceiverActive = data.HfReceiverActive;
         var leaks = data.PressureSwitchStates.Count(s => !s);
         SetStatus(leaks == 0 ? "All four pressure switches OK." : $"WARNING: {leaks} wheel(s) show pressure loss.");
-    }, "Reading tire pressure sensors...");
+    }, _session, "Reading tire pressure sensors...");
 }

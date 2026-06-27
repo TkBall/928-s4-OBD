@@ -18,6 +18,7 @@ public sealed class Iso9141Session
     private readonly IKLineInterface _interface;
 
     public bool IsConnected { get; private set; }
+    public bool IsPortOpen => _interface.IsOpen;
     public byte EcuAddress { get; private set; }
     public byte KeyWord1 { get; private set; }
     public byte KeyWord2 { get; private set; }

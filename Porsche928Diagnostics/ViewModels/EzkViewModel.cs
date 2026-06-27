@@ -37,7 +37,7 @@ public partial class EzkViewModel : ViewModelBase
         EcuId = id.ToString();
         IsSessionActive = true;
         SetStatus($"EZK connected: {id}");
-    }, "Initializing EZK session...");
+    }, _session, "Initializing EZK session...");
 
     [RelayCommand]
     private async Task ReadDtcsAsync() => await RunBusyAsync(async () =>
@@ -46,7 +46,7 @@ public partial class EzkViewModel : ViewModelBase
         Dtcs.Clear();
         foreach (var dtc in dtcs) Dtcs.Add(dtc);
         SetStatus(dtcs.Count == 0 ? "No EZK fault codes." : $"{dtcs.Count} fault code(s).");
-    }, "Reading EZK fault codes...");
+    }, _session, "Reading EZK fault codes...");
 
     [RelayCommand]
     private async Task ClearDtcsAsync()
@@ -57,7 +57,7 @@ public partial class EzkViewModel : ViewModelBase
             await _module.ClearDtcsAsync();
             Dtcs.Clear();
             SetStatus("EZK fault codes cleared.");
-        });
+        }, _session);
     }
 
     [RelayCommand]
@@ -77,7 +77,7 @@ public partial class EzkViewModel : ViewModelBase
         EngineTemperature = data.EngineTemperatureDegC;
         TransmissionCoding = data.TransmissionCoding;
         SetStatus($"RPM: {data.EngineRpm}  Load: {data.LoadPercent:F1}%  Trans: {data.TransmissionCoding}");
-    }, "Reading EZK sensor data...");
+    }, _session, "Reading EZK sensor data...");
 
     [RelayCommand]
     private async Task ReadKnockCountsAsync() => await RunBusyAsync(async () =>
@@ -87,5 +87,5 @@ public partial class EzkViewModel : ViewModelBase
         for (int i = 0; i < counts.Length; i++)
             KnockCounts.Add($"Cylinder {i + 1}: {counts[i]} knock events{(counts[i] > 0 ? " ⚠" : "")}");
         SetStatus("Knock registration read.");
-    }, "Reading knock counters...");
+    }, _session, "Reading knock counters...");
 }

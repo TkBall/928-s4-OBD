@@ -36,7 +36,7 @@ public partial class PsdViewModel : ViewModelBase
         EcuId = id.ToString();
         IsSessionActive = true;
         SetStatus($"PSD connected: {id}");
-    }, "Initializing PSD session...");
+    }, _session, "Initializing PSD session...");
 
     [RelayCommand]
     private async Task ReadDtcsAsync() => await RunBusyAsync(async () =>
@@ -45,7 +45,7 @@ public partial class PsdViewModel : ViewModelBase
         Dtcs.Clear();
         foreach (var dtc in dtcs) Dtcs.Add(dtc);
         SetStatus(dtcs.Count == 0 ? "No PSD fault codes." : $"{dtcs.Count} fault code(s).");
-    });
+    }, _session);
 
     [RelayCommand]
     private async Task ClearDtcsAsync()
@@ -56,7 +56,7 @@ public partial class PsdViewModel : ViewModelBase
             await _module.ClearDtcsAsync();
             Dtcs.Clear();
             SetStatus("PSD fault codes cleared.");
-        });
+        }, _session);
     }
 
     [RelayCommand]
@@ -70,6 +70,7 @@ public partial class PsdViewModel : ViewModelBase
     [RelayCommand]
     private async Task StartBleedAsync()
     {
+        if (!_session.IsPortOpen) { SetStatus("Not connected — use Connect in the toolbar first.", isError: true); return; }
         _bleedCts?.Cancel();
         _bleedCts?.Dispose();
         _bleedCts = new CancellationTokenSource();
@@ -81,7 +82,6 @@ public partial class PsdViewModel : ViewModelBase
             var progress = new Progress<string>(msg =>
             {
                 SetStatus(msg);
-                // parse remaining seconds from the module's progress string
                 var match = System.Text.RegularExpressions.Regex.Match(msg, @"(\d+)s remaining");
                 if (match.Success && int.TryParse(match.Groups[1].Value, out var remaining))
                 {

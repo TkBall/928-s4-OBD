@@ -41,7 +41,7 @@ public partial class LhViewModel : ViewModelBase
         EcuId = id.ToString();
         IsSessionActive = true;
         SetStatus($"LH connected: {id}");
-    }, "Initializing LH session...");
+    }, _session, "Initializing LH session...");
 
     [RelayCommand]
     private async Task ReadDtcsAsync() => await RunBusyAsync(async () =>
@@ -50,7 +50,7 @@ public partial class LhViewModel : ViewModelBase
         Dtcs.Clear();
         foreach (var dtc in dtcs) Dtcs.Add(dtc);
         SetStatus(dtcs.Count == 0 ? "No fault codes stored." : $"{dtcs.Count} fault code(s) found.");
-    }, "Reading fault codes...");
+    }, _session, "Reading fault codes...");
 
     [RelayCommand]
     private async Task ClearDtcsAsync()
@@ -61,7 +61,7 @@ public partial class LhViewModel : ViewModelBase
             await _module.ClearDtcsAsync();
             Dtcs.Clear();
             SetStatus("Fault codes cleared.");
-        }, "Clearing fault codes...");
+        }, _session, "Clearing fault codes...");
     }
 
     [RelayCommand]
@@ -80,7 +80,7 @@ public partial class LhViewModel : ViewModelBase
         EngineTemperature = values.EngineTemperatureDegC;
         EzkOnSignal = values.EzkOnSignal;
         SetStatus($"Battery: {values.BatteryVoltage:F2}V  Temp: {values.EngineTemperatureDegC:F0}°C");
-    }, "Reading actual values...");
+    }, _session, "Reading actual values...");
 
     [RelayCommand]
     private async Task ReadActiveValuesAsync() => await RunBusyAsync(async () =>
@@ -89,7 +89,7 @@ public partial class LhViewModel : ViewModelBase
         MafVoltage = values.MafVoltage;
         LambdaVoltage = values.LambdaVoltage;
         SetStatus($"MAF: {values.MafVoltage:F2}V  Lambda: {values.LambdaVoltage:F0}mV");
-    }, "Reading active values (engine running)...");
+    }, _session, "Reading active values (engine running)...");
 
     [RelayCommand]
     private async Task ReadInputSignalsAsync() => await RunBusyAsync(async () =>
@@ -99,69 +99,70 @@ public partial class LhViewModel : ViewModelBase
         WotSwitch = signals.WideOpenThrottleSwitch;
         AircoActive = signals.AircoCompressorDemand;
         SetStatus("Input signals read.");
-    }, "Reading input signals...");
+    }, _session, "Reading input signals...");
 
     [RelayCommand]
     private async Task ActivateTankVentAsync() => await RunBusyAsync(async () =>
     {
         await _module.ActivateDriveLinkAsync(LhDriveLink.TankVentValve);
         SetStatus("Tank vent valve ACTIVE.");
-    }, "Activating tank vent valve...");
+    }, _session, "Activating tank vent valve...");
 
     [RelayCommand]
     private async Task StopTankVentAsync() => await RunBusyAsync(async () =>
     {
         await _module.StopDriveLinkAsync(LhDriveLink.TankVentValve);
         SetStatus("Tank vent valve stopped.");
-    });
+    }, _session);
 
     [RelayCommand]
     private async Task ActivateResonanceFlapAsync() => await RunBusyAsync(async () =>
     {
         await _module.ActivateDriveLinkAsync(LhDriveLink.ResonanceFlap);
         SetStatus("Resonance flap ACTIVE.");
-    });
+    }, _session);
 
     [RelayCommand]
     private async Task StopResonanceFlapAsync() => await RunBusyAsync(async () =>
     {
         await _module.StopDriveLinkAsync(LhDriveLink.ResonanceFlap);
         SetStatus("Resonance flap stopped.");
-    });
+    }, _session);
 
     [RelayCommand]
     private async Task ActivateInjectorsAsync() => await RunBusyAsync(async () =>
     {
         await _module.ActivateDriveLinkAsync(LhDriveLink.FuelInjectors);
         SetStatus("Fuel injectors ACTIVE.");
-    });
+    }, _session);
 
     [RelayCommand]
     private async Task StopInjectorsAsync() => await RunBusyAsync(async () =>
     {
         await _module.StopDriveLinkAsync(LhDriveLink.FuelInjectors);
         SetStatus("Injectors stopped.");
-    });
+    }, _session);
 
     [RelayCommand]
     private async Task ActivateIsvAsync() => await RunBusyAsync(async () =>
     {
         await _module.ActivateDriveLinkAsync(LhDriveLink.IdleStabilizerValve);
         SetStatus("Idle Stabilizer Valve ACTIVE.");
-    });
+    }, _session);
 
     [RelayCommand]
     private async Task StopIsvAsync() => await RunBusyAsync(async () =>
     {
         await _module.StopDriveLinkAsync(LhDriveLink.IdleStabilizerValve);
         SetStatus("ISV stopped.");
-    });
+    }, _session);
 
     private CancellationTokenSource? _sapCts;
 
     [RelayCommand]
     private async Task RunSapAsync()
     {
+        if (!_session.IsPortOpen) { SetStatus("Not connected — use Connect in the toolbar first.", isError: true); return; }
         _sapCts?.Cancel();
         _sapCts?.Dispose();
         _sapCts = new CancellationTokenSource();

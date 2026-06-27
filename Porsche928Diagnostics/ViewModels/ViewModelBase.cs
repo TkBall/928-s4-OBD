@@ -13,6 +13,19 @@ public abstract partial class ViewModelBase : ObservableObject
     [ObservableProperty]
     private bool _hasError;
 
+    // Overload that adds a synchronous port-open guard before the async work.
+    // Returns immediately with an error message if the serial port is not open,
+    // so the status bar updates instantly without waiting for a timeout.
+    protected Task RunBusyAsync(Func<Task> action, Protocol.Iso9141Session session, string busyMessage = "Working...")
+    {
+        if (!session.IsPortOpen)
+        {
+            SetStatus("Not connected — use Connect in the toolbar first.", isError: true);
+            return Task.CompletedTask;
+        }
+        return RunBusyAsync(action, busyMessage);
+    }
+
     protected static bool Confirm(string message, string title = "Confirm")
     {
         var result = System.Windows.MessageBox.Show(

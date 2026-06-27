@@ -37,7 +37,7 @@ public partial class AirbagViewModel : ViewModelBase
         EcuId = id.ToString();
         IsSessionActive = true;
         SetStatus($"Airbag ECU connected: {id}");
-    }, "Initializing Airbag session...");
+    }, _session, "Initializing Airbag session...");
 
     [RelayCommand]
     private async Task ReadDtcsAsync() => await RunBusyAsync(async () =>
@@ -46,7 +46,7 @@ public partial class AirbagViewModel : ViewModelBase
         Dtcs.Clear();
         foreach (var dtc in dtcs) Dtcs.Add(dtc);
         SetStatus(dtcs.Count == 0 ? "No airbag fault codes." : $"{dtcs.Count} fault code(s).");
-    });
+    }, _session);
 
     [RelayCommand]
     private async Task ClearDtcsAsync()
@@ -57,7 +57,7 @@ public partial class AirbagViewModel : ViewModelBase
             await _module.ClearDtcsAsync();
             Dtcs.Clear();
             SetStatus("Airbag fault codes cleared.");
-        });
+        }, _session);
     }
 
     [RelayCommand]
@@ -82,5 +82,5 @@ public partial class AirbagViewModel : ViewModelBase
             SetStatus("WARNING: Crash deployment data recorded in non-volatile memory.", isError: true);
         else
             SetStatus($"Downtime: {DowntimeClock}. No crash events.");
-    }, "Reading airbag data...");
+    }, _session, "Reading airbag data...");
 }
