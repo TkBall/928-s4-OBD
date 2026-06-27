@@ -60,7 +60,7 @@
         </Border>
 
         <!-- ── Module tabs ── -->
-        <TabControl IsEnabled="{Binding IsConnected}">
+        <TabControl>
 
             <TabItem>
                 <TabItem.Header>
