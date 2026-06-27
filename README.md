@@ -7,7 +7,7 @@ A Windows desktop application for reading fault codes, live sensor data, and per
 ## Contents
 
 1. [Hardware requirements](#1-hardware-requirements)
-2. [Building and running](#2-building-and-running)
+2. [Running the application](#2-running-the-application)
 3. [Connecting to the car](#3-connecting-to-the-car)
 4. [Application overview](#4-application-overview)
 5. [LH Jetronic 2.3 — fuel injection (0x11)](#5-lh-jetronic-23--fuel-injection-0x11)
@@ -33,7 +33,7 @@ The driver must use **RTS = inactive (high)** and **DTR = inactive (high)**. The
 
 ### Car-side connector
 
-The 928 OBD socket is a **19-pin Porsche diagnostic connector** located under the front bonnet, to the right of the brake fluid reservoir. Pin numbering:
+The 928 OBD socket is a **19-pin Porsche diagnostic connector** located in the **passenger side footwell**, mounted on the inner sill. Pin numbering:
 
 | Pin | Signal |
 |-----|--------|
@@ -46,7 +46,7 @@ Connect the adapter TX/RX (combined through the interface circuit) to pin 3, and
 
 ### Computer
 
-Windows 10 or Windows 11 with .NET 8 Desktop Runtime installed. The FTDI CDM driver (v2.12 or later) must be installed; Windows Update usually provides it automatically when the adapter is first plugged in.
+Windows 10 or Windows 11. No .NET runtime installation is required — the runtime is bundled in the exe. The FTDI CDM driver (v2.12 or later) must be installed; Windows Update usually provides it automatically when the adapter is first plugged in.
 
 ---
 
@@ -358,7 +358,7 @@ Click **Start Guided Sequence**. The application walks through 10 timed steps:
 | Coolant level | OK | LOW = check expansion tank |
 | **Toothed belt tension** | **OK** | **FAULT = stop using vehicle immediately. Inspect tensioner roller.** |
 
-The toothed belt tension reading is the most safety-critical item. A faulty tensioner on the 928's single overhead-cam belt drive can result in belt slip or failure with catastrophic engine damage. If this reads FAULT, the car must not be driven until the tensioner and belt are inspected and replaced as necessary.
+The toothed belt tension reading is the most safety-critical item. The 928 S4's 32-valve DOHC V8 drives four camshafts from a single toothed rubber belt; a failed tensioner allows belt slip or breakage with catastrophic engine damage. If this reads FAULT, the car must not be driven until the tensioner and belt are inspected and replaced as necessary.
 
 ### Notes on the checklist panel
 
@@ -387,7 +387,7 @@ The following codes are pre-loaded with descriptions. Any code not in this list 
 | 0x31 0x11 | Idle stabilizer valve — electrical fault |
 | 0x32 0x11 | Tank vent valve — electrical fault |
 | 0x33 0x11 | Resonance flap — electrical fault |
-| 0x41 0x11 | EZK/LH CAN link fault |
+| 0x41 0x11 | EZK/LH synchronisation signal fault |
 | 0x44 0x11 | Vehicle speed signal missing |
 
 ---
