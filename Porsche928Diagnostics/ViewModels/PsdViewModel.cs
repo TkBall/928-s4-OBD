@@ -53,6 +53,8 @@ public partial class PsdViewModel : ViewModelBase
     [RelayCommand]
     private async Task StartBleedAsync()
     {
+        _bleedCts?.Cancel();
+        _bleedCts?.Dispose();
         _bleedCts = new CancellationTokenSource();
         BleedActive = true;
         await RunBusyAsync(async () =>

@@ -23,6 +23,8 @@ public partial class DigitalDashViewModel : ViewModelBase
     [RelayCommand]
     private async Task StartSequenceAsync()
     {
+        _sequenceCts?.Cancel();
+        _sequenceCts?.Dispose();
         _sequenceCts = new CancellationTokenSource();
         SequenceRunning = true;
         CurrentStep = 0;

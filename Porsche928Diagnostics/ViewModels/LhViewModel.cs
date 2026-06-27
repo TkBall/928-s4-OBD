@@ -147,6 +147,8 @@ public partial class LhViewModel : ViewModelBase
     [RelayCommand]
     private async Task RunSapAsync()
     {
+        _sapCts?.Cancel();
+        _sapCts?.Dispose();
         _sapCts = new CancellationTokenSource();
         SapRunning = true;
         await RunBusyAsync(async () =>
