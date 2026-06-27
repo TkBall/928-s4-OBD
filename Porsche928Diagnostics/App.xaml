@@ -1,9 +1,7 @@
-﻿<Application x:Class="Porsche928Diagnostics.App"
+<Application x:Class="Porsche928Diagnostics.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Porsche928Diagnostics"
-             StartupUri="MainWindow.xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
-         
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
     </Application.Resources>
 </Application>
