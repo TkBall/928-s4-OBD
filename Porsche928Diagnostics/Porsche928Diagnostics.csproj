@@ -10,7 +10,7 @@
     <StartupObject>Porsche928Diagnostics.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
-    <PackageReference Include="System.IO.Ports" Version="9.*" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.*" />
+    <PackageReference Include="System.IO.Ports" Version="9.0.*" />
   </ItemGroup>
 </Project>
