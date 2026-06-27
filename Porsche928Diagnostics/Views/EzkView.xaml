@@ -7,10 +7,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="3"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="0"
                 Background="{Binding IsSessionActive, Converter={x:Static views:SessionDotConverter.Instance}}"/>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="20,16,20,20">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="20,16,20,8">
             <StackPanel>
 
                 <!-- ECU SESSION -->
@@ -98,14 +99,13 @@
                     </StackPanel>
                 </Border>
 
-                <!-- STATUS -->
-                <Border Style="{StaticResource StatusBar}">
-                    <TextBlock Text="{Binding StatusMessage}"
-                               Style="{StaticResource StatusText}"
-                               Foreground="{Binding HasError, Converter={x:Static views:BoolToColorConverter.Instance}}"/>
-                </Border>
-
             </StackPanel>
         </ScrollViewer>
+
+        <Border Grid.Row="2" Style="{StaticResource StatusBar}" Margin="20,0,20,8">
+            <TextBlock Text="{Binding StatusMessage}"
+                       Style="{StaticResource StatusText}"
+                       Foreground="{Binding HasError, Converter={x:Static views:BoolToColorConverter.Instance}}"/>
+        </Border>
     </Grid>
 </UserControl>

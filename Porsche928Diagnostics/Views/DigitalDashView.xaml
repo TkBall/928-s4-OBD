@@ -3,7 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="clr-namespace:Porsche928Diagnostics.Views"
              Background="#090909" Foreground="#EEEEEE">
-    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20,16,20,20">
+    <DockPanel>
+        <!-- STATUS — pinned to bottom, always visible -->
+        <Border DockPanel.Dock="Bottom" Style="{StaticResource StatusBar}" Margin="20,0,20,8">
+            <TextBlock Text="{Binding StatusMessage}"
+                       Style="{StaticResource StatusText}"
+                       Foreground="{Binding HasError, Converter={x:Static views:BoolToColorConverter.Instance}}"/>
+        </Border>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20,16,20,8">
         <StackPanel>
 
             <!-- HEADER -->
@@ -101,13 +109,7 @@
                 </StackPanel>
             </Border>
 
-            <!-- STATUS -->
-            <Border Style="{StaticResource StatusBar}">
-                <TextBlock Text="{Binding StatusMessage}"
-                           Style="{StaticResource StatusText}"
-                           Foreground="{Binding HasError, Converter={x:Static views:BoolToColorConverter.Instance}}"/>
-            </Border>
-
         </StackPanel>
-    </ScrollViewer>
+        </ScrollViewer>
+    </DockPanel>
 </UserControl>
