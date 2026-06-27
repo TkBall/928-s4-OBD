@@ -1,0 +1,65 @@
+<UserControl x:Class="Porsche928Diagnostics.Views.AirbagView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:Porsche928Diagnostics.Views"
+             Background="#1E1E1E" Foreground="#E8E8E8">
+    <ScrollViewer>
+        <StackPanel Margin="16">
+            <GroupBox Header="ECU Session" BorderBrush="#555" Margin="0,0,0,10" Foreground="#CCC">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Initialize Airbag Session" Command="{Binding ConnectEcuAsyncCommand}"/>
+                        <TextBlock Text="{Binding EcuId}" VerticalAlignment="Center" Margin="10,0" Foreground="#AAFFAA"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <Button Content="Read Fault Codes" Command="{Binding ReadDtcsAsyncCommand}"/>
+                        <Button Content="Clear Fault Codes" Command="{Binding ClearDtcsAsyncCommand}" Background="#5C3A1A"/>
+                    </StackPanel>
+                    <ListBox ItemsSource="{Binding Dtcs}" MaxHeight="100" Background="#111" Foreground="#FFAAAA" Margin="0,4,0,0"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Downtime Clock &amp; Crash Data" BorderBrush="#AA2200" Margin="0,0,0,10" Foreground="#CC8888">
+                <StackPanel>
+                    <Button Content="Read Airbag Data" Command="{Binding ReadAirbagDataAsyncCommand}" HorizontalAlignment="Left"/>
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                            <TextBlock Text="Capacitor Downtime Clock" Foreground="#888" FontSize="11"/>
+                            <TextBlock Text="{Binding DowntimeClock}" FontSize="18" FontWeight="Bold" Foreground="#AACCFF"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Crash Event Recorded" Foreground="#888" FontSize="11"/>
+                            <TextBlock Text="{Binding CrashEventRecorded}" FontSize="18" FontWeight="Bold"
+                                       Foreground="{Binding CrashEventRecorded, Converter={x:Static views:BoolToColorConverter.Instance}}"/>
+                        </StackPanel>
+                    </Grid>
+                    <Separator Margin="0,8" Background="#555"/>
+                    <TextBlock Text="Deployment Status:" Foreground="#888" Margin="0,0,0,4"/>
+                    <UniformGrid Columns="3">
+                        <Border Margin="4" Padding="8,6" CornerRadius="4"
+                                Background="{Binding DriverBagFired, Converter={x:Static views:BoolToColorConverter.Instance}}">
+                            <TextBlock Text="Driver Airbag" Foreground="Black" HorizontalAlignment="Center"/>
+                        </Border>
+                        <Border Margin="4" Padding="8,6" CornerRadius="4"
+                                Background="{Binding PassengerBagFired, Converter={x:Static views:BoolToColorConverter.Instance}}">
+                            <TextBlock Text="Passenger Airbag" Foreground="Black" HorizontalAlignment="Center"/>
+                        </Border>
+                        <Border Margin="4" Padding="8,6" CornerRadius="4"
+                                Background="{Binding SeatbeltFired, Converter={x:Static views:BoolToColorConverter.Instance}}">
+                            <TextBlock Text="Seatbelt Pretensioner" Foreground="Black" HorizontalAlignment="Center"/>
+                        </Border>
+                    </UniformGrid>
+                </StackPanel>
+            </GroupBox>
+
+            <Border Background="#111" Padding="8,4" CornerRadius="4">
+                <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap"
+                           Foreground="{Binding HasError, Converter={x:Static views:BoolToColorConverter.Instance}}"/>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

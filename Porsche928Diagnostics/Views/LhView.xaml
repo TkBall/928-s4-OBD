@@ -1,0 +1,127 @@
+<UserControl x:Class="Porsche928Diagnostics.Views.LhView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:Porsche928Diagnostics.Views"
+             Background="#1E1E1E" Foreground="#E8E8E8">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="16">
+
+            <GroupBox Header="ECU Session" Margin="0,0,0,10" BorderBrush="#555" Foreground="#CCC">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Initialize LH Session" Command="{Binding ConnectEcuAsyncCommand}"/>
+                        <TextBlock Text="{Binding EcuId}" VerticalAlignment="Center" Margin="10,0" Foreground="#AAFFAA"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <Button Content="Read Fault Codes" Command="{Binding ReadDtcsAsyncCommand}"/>
+                        <Button Content="Clear Fault Codes" Command="{Binding ClearDtcsAsyncCommand}" Background="#5C3A1A"/>
+                    </StackPanel>
+                    <ListBox ItemsSource="{Binding Dtcs}" MaxHeight="120" Background="#111"
+                             Margin="0,4,0,0" Foreground="#FFAAAA" DisplayMemberPath="." />
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Actual Values" Margin="0,0,0,10" BorderBrush="#555" Foreground="#CCC">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
+                        <Button Content="Read Static Values" Command="{Binding ReadActualValuesAsyncCommand}"/>
+                        <Button Content="Read Active Values (Engine Running)" Command="{Binding ReadActiveValuesAsyncCommand}"/>
+                    </StackPanel>
+                    <UniformGrid Columns="3" Margin="0,4">
+                        <StackPanel Margin="4">
+                            <TextBlock Text="Battery Voltage" Foreground="#888" FontSize="11"/>
+                            <TextBlock Text="{Binding BatteryVoltage, StringFormat={}{0:F2} V}" FontSize="16" FontWeight="Bold"/>
+                        </StackPanel>
+                        <StackPanel Margin="4">
+                            <TextBlock Text="Engine Temperature" Foreground="#888" FontSize="11"/>
+                            <TextBlock Text="{Binding EngineTemperature, StringFormat={}{0:F0} °C}" FontSize="16" FontWeight="Bold"/>
+                        </StackPanel>
+                        <StackPanel Margin="4">
+                            <TextBlock Text="EZK On Signal" Foreground="#888" FontSize="11"/>
+                            <TextBlock Text="{Binding EzkOnSignal}" FontSize="16" FontWeight="Bold"
+                                       Foreground="{Binding EzkOnSignal, Converter={x:Static views:BoolToColorConverter.Instance}}"/>
+                        </StackPanel>
+                        <StackPanel Margin="4">
+                            <TextBlock Text="MAF Voltage" Foreground="#888" FontSize="11"/>
+                            <TextBlock Text="{Binding MafVoltage, StringFormat={}{0:F2} V}" FontSize="16"/>
+                        </StackPanel>
+                        <StackPanel Margin="4">
+                            <TextBlock Text="Lambda (O2)" Foreground="#888" FontSize="11"/>
+                            <TextBlock Text="{Binding LambdaVoltage, StringFormat={}{0:F0} mV}" FontSize="16"/>
+                        </StackPanel>
+                    </UniformGrid>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Input Signals" Margin="0,0,0,10" BorderBrush="#555" Foreground="#CCC">
+                <StackPanel>
+                    <Button Content="Read Input Signals" Command="{Binding ReadInputSignalsAsyncCommand}" HorizontalAlignment="Left"/>
+                    <UniformGrid Columns="4" Margin="0,6">
+                        <Border Background="{Binding ThrottleIdleSwitch, Converter={x:Static views:BoolToColorConverter.Instance}}"
+                                CornerRadius="4" Margin="4" Padding="8,4">
+                            <TextBlock Text="Throttle Idle" HorizontalAlignment="Center" Foreground="Black"/>
+                        </Border>
+                        <Border Background="{Binding WotSwitch, Converter={x:Static views:BoolToColorConverter.Instance}}"
+                                CornerRadius="4" Margin="4" Padding="8,4">
+                            <TextBlock Text="WOT" HorizontalAlignment="Center" Foreground="Black"/>
+                        </Border>
+                        <Border Background="{Binding AircoActive, Converter={x:Static views:BoolToColorConverter.Instance}}"
+                                CornerRadius="4" Margin="4" Padding="8,4">
+                            <TextBlock Text="A/C Demand" HorizontalAlignment="Center" Foreground="Black"/>
+                        </Border>
+                    </UniformGrid>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Drive Link Tests" Margin="0,0,0,10" BorderBrush="#555" Foreground="#CCC">
+                <UniformGrid Columns="2">
+                    <StackPanel Margin="4">
+                        <TextBlock Text="Tank Vent Valve" Foreground="#888"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Activate" Command="{Binding ActivateTankVentAsyncCommand}" Background="#1A4A1A"/>
+                            <Button Content="Stop" Command="{Binding StopTankVentAsyncCommand}" Background="#4A1A1A"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Margin="4">
+                        <TextBlock Text="Resonance Flap" Foreground="#888"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Activate" Command="{Binding ActivateResonanceFlapAsyncCommand}" Background="#1A4A1A"/>
+                            <Button Content="Stop" Command="{Binding StopResonanceFlapAsyncCommand}" Background="#4A1A1A"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Margin="4">
+                        <TextBlock Text="Fuel Injectors" Foreground="#888"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Activate" Command="{Binding ActivateInjectorsAsyncCommand}" Background="#1A4A1A"/>
+                            <Button Content="Stop" Command="{Binding StopInjectorsAsyncCommand}" Background="#4A1A1A"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Margin="4">
+                        <TextBlock Text="Idle Stabilizer Valve" Foreground="#888"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Activate" Command="{Binding ActivateIsvAsyncCommand}" Background="#1A4A1A"/>
+                            <Button Content="Stop" Command="{Binding StopIsvAsyncCommand}" Background="#4A1A1A"/>
+                        </StackPanel>
+                    </StackPanel>
+                </UniformGrid>
+            </GroupBox>
+
+            <GroupBox Header="System Adaptation Program (SAP)" Margin="0,0,0,10" BorderBrush="#AA8800" Foreground="#CCCC88">
+                <StackPanel>
+                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,6" Foreground="#CCCC88"
+                               Text="Engine must be at operating temperature (80°C+), idling smoothly. SAP monitors lambda closed-loop and writes corrected base injection pulse to non-volatile RAM."/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="▶ Run SAP" Command="{Binding RunSapAsyncCommand}" Background="#1A5C1A" Width="100"/>
+                        <Button Content="■ Stop" Command="{Binding StopSapCommand}" Background="#5C1A1A" Width="60"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <Border Background="#111" Padding="8,4" CornerRadius="4">
+                <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap"
+                           Foreground="{Binding HasError, Converter={x:Static views:BoolToColorConverter.Instance}}"/>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
