@@ -18,6 +18,10 @@
                 <Border Style="{StaticResource SectionCard}">
                     <StackPanel>
                         <TextBlock Text="ECU SESSION" Style="{StaticResource SectionHeader}"/>
+                        <Border Style="{StaticResource AlertBanner}">
+                            <TextBlock Foreground="#F59E0B" FontSize="12" TextWrapping="Wrap"
+                                       Text="ℹ FEATURE NOTE — The factory alarm (option code M533) was optional equipment across the whole 928 production run, not tied to a specific model year. If F57GNT wasn't ordered with it, this ECU will not respond — that's expected, not a fault."/>
+                        </Border>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <Button Content="Initialise Alarm Session" Command="{Binding ConnectEcuAsyncCommand}"
                                     Style="{StaticResource Btn.Primary}"/>

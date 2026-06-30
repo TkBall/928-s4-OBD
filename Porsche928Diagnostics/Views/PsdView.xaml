@@ -18,6 +18,10 @@
                 <Border Style="{StaticResource SectionCard}">
                     <StackPanel>
                         <TextBlock Text="ECU SESSION" Style="{StaticResource SectionHeader}"/>
+                        <Border Style="{StaticResource AlertBanner}">
+                            <TextBlock Foreground="#F59E0B" FontSize="12" TextWrapping="Wrap"
+                                       Text="ℹ MODEL YEAR NOTE — The electronic PSD (Sperrdifferenzial) was standard from MY1990 only. Pre-1990 928 S4s (most 1989 cars, including F57GNT unless factory-optioned) have the mechanical ZF 40% limited-slip diff instead, which has no electronic module to query. No response from this ECU is expected on this car, not a fault."/>
+                        </Border>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <Button Content="Initialise PSD Session" Command="{Binding ConnectEcuAsyncCommand}"
                                     Style="{StaticResource Btn.Primary}"/>

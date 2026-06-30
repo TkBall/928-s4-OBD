@@ -18,6 +18,10 @@
                 <Border Style="{StaticResource SectionCard}">
                     <StackPanel>
                         <TextBlock Text="ECU SESSION" Style="{StaticResource SectionHeader}"/>
+                        <Border Style="{StaticResource AlertBanner}">
+                            <TextBlock Foreground="#F59E0B" FontSize="12" TextWrapping="Wrap"
+                                       Text="ℹ MODEL YEAR NOTE — Airbags were not fitted to any 928 before MY1990; a pre-1990 car will have no airbag ECU to query at all. From MY1990, UK/RHD cars (like F57GNT) received a driver-side airbag only — no passenger airbag was ever fitted to RHD cars due to dashboard packaging, so the passenger field below will read empty/false by design."/>
+                        </Border>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <Button Content="Initialise Airbag Session" Command="{Binding ConnectEcuAsyncCommand}"
                                     Style="{StaticResource Btn.Primary}"/>
@@ -88,7 +92,8 @@
                                     BorderBrush="{Binding PassengerBagFired, Converter={x:Static views:BoolToColorConverter.Instance}}"
                                     Background="#181818">
                                 <StackPanel HorizontalAlignment="Center">
-                                    <TextBlock Text="PASSENGER AIRBAG" Style="{StaticResource ValueLabel}" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="PASSENGER AIRBAG (not fitted — RHD)" Style="{StaticResource ValueLabel}"
+                                               HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
                                     <TextBlock Text="{Binding PassengerBagFired}"
                                                Style="{StaticResource ValueDisplaySmall}"
                                                Foreground="{Binding PassengerBagFired, Converter={x:Static views:BoolToColorConverter.Instance}}"
