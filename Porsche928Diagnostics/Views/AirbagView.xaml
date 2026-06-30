@@ -20,7 +20,7 @@
                         <TextBlock Text="ECU SESSION" Style="{StaticResource SectionHeader}"/>
                         <Border Style="{StaticResource AlertBanner}">
                             <TextBlock Foreground="#F59E0B" FontSize="12" TextWrapping="Wrap"
-                                       Text="ℹ MODEL YEAR NOTE — A driver airbag was optional on 1989 928 S4s and did not become standard until MY1990. If F57GNT wasn't ordered with the option, this ECU will not respond — that's expected, not a fault. From MY1990, UK/RHD cars received a driver-side airbag only — no passenger airbag was ever fitted to RHD cars due to dashboard packaging, so the passenger field below will read empty/false by design."/>
+                                       Text="ℹ MODEL YEAR NOTE — A driver airbag was optional on 1989 928 S4s and did not become standard until MY1990. If your car wasn't ordered with the option, this ECU will not respond — that's expected, not a fault. From MY1990, UK/RHD cars received a driver-side airbag only — no passenger airbag was ever fitted to RHD cars due to dashboard packaging, so the passenger field below will read empty/false by design."/>
                         </Border>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <Button Content="Initialise Airbag Session" Command="{Binding ConnectEcuAsyncCommand}"
