@@ -10,3 +10,7 @@ publish/
 ## OS
 Thumbs.db
 .DS_Store
+
+## Claude Code local tooling
+.claude/
+skills-lock.json
