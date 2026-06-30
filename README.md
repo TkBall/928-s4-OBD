@@ -211,6 +211,8 @@ Non-zero values indicate retarded timing on that cylinder. Values above ~10 per 
 
 The PSD (Porsche Slip Differential) is an electronically controlled limited-slip differential. A hydraulic pump maintains clutch pack pressure. The ECU monitors wheel speeds and modulates a solenoid valve.
 
+> **Model year note:** The electronic PSD was standard from MY1990 only. Pre-1990 928 S4s (most 1989 cars, including F57GNT unless factory-optioned) have the mechanical ZF 40% limited-slip differential instead, which has no electronic module to query. If this ECU doesn't respond on a pre-1990 car, that's expected — not a fault.
+
 ### Hydraulic bleed procedure
 
 The bleed procedure is required after any hydraulic work on the PSD circuit (pump replacement, hose work, fluid change).
@@ -246,6 +248,8 @@ The bleed procedure is required after any hydraulic work on the PSD circuit (pum
 
 The RDK system (German: *Reifendruckkontrolle*) uses pressure switches inside each wheel that send an RF signal to a receiver under the car. The ECU decodes the signals.
 
+> **Model year note:** RDK was an optional extra on the 1989 928 S4 and only became standard from MY1990. If F57GNT wasn't ordered with the option, this ECU will not respond — that's expected, not a fault.
+
 ### Pressure switch states
 
 Click **Read Pressure Sensors**. Four tiles show the state of each wheel:
@@ -274,6 +278,8 @@ All four green at rest with the car on its wheels is the normal state. Red on a 
 
 **Warning: do not perform electrical work on the airbag circuit while the ECU has power or the capacitor has charge. The downtime clock on this tab tells you how much charge remains.**
 
+> **Model year note:** A driver airbag was optional on 1989 928 S4s and did not become standard until MY1990 — if F57GNT wasn't ordered with the option, this ECU will not respond. From MY1990, UK/RHD cars received a driver-side airbag only; no passenger airbag was ever fitted to RHD cars due to dashboard packaging, so the passenger field will read empty/false by design.
+
 ### Airbag data
 
 Click **Read Airbag Data**.
@@ -291,6 +297,8 @@ Read and clear as with other modules. Common codes include squib resistance out 
 ---
 
 ## 10. Alarm system (0x45)
+
+> **Feature note:** The factory alarm (option code M533) was optional equipment across the whole 928 production run, not tied to a specific model year. If F57GNT wasn't ordered with it, this ECU will not respond — that's expected, not a fault.
 
 ### Input switch states
 
