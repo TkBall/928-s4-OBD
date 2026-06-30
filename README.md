@@ -2,7 +2,7 @@
 
 A Windows desktop application for reading fault codes, live sensor data, and performing actuator tests on the six ECUs fitted to a Porsche 928 S4 via the factory K-Line diagnostic bus.
 
-There's a single release in the release folder marked DANGEROUS, becasue this is completely untested. https://github.com/TkBall/928-s4-OBD/releases/tag/dangerous
+There's a single release in the release folder marked DANGEROUS, because this is completely untested. https://github.com/TkBall/928-s4-OBD/releases/tag/dangerous
 
 ---
 
