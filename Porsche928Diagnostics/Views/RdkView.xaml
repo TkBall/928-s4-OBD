@@ -2,7 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="clr-namespace:Porsche928Diagnostics.Views"
-             Background="#090909" Foreground="#EEEEEE">
+             Background="{DynamicResource Bg.Page}" Foreground="{DynamicResource Text.Primary}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3"/>
@@ -19,7 +19,7 @@
                     <StackPanel>
                         <TextBlock Text="ECU SESSION" Style="{StaticResource SectionHeader}"/>
                         <Border Style="{StaticResource AlertBanner}">
-                            <TextBlock Foreground="#F59E0B" FontSize="12" TextWrapping="Wrap"
+                            <TextBlock Foreground="{DynamicResource Amber.Text}" FontSize="12" TextWrapping="Wrap"
                                        Text="ℹ MODEL YEAR NOTE — RDK tyre-pressure monitoring was an optional extra on the 1989 928 S4 (standard from MY1990). If your car wasn't factory-fitted with this option, this ECU will not respond — that's expected, not a fault."/>
                         </Border>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
@@ -55,7 +55,7 @@
                         <UniformGrid Columns="2">
                             <Border Margin="0,0,6,6" Padding="20,16" CornerRadius="10" BorderThickness="1.5"
                                     BorderBrush="{Binding FlPressureOk, Converter={x:Static views:PresenceIsGoodConverter.Instance}}"
-                                    Background="#181818">
+                                    Background="{DynamicResource Bg.CardRaised}">
                                 <StackPanel HorizontalAlignment="Center">
                                     <TextBlock Text="FRONT LEFT" Style="{StaticResource ValueLabel}" HorizontalAlignment="Center"/>
                                     <TextBlock Text="{Binding FlPressureOk}"
@@ -66,7 +66,7 @@
                             </Border>
                             <Border Margin="0,0,0,6" Padding="20,16" CornerRadius="10" BorderThickness="1.5"
                                     BorderBrush="{Binding FrPressureOk, Converter={x:Static views:PresenceIsGoodConverter.Instance}}"
-                                    Background="#181818">
+                                    Background="{DynamicResource Bg.CardRaised}">
                                 <StackPanel HorizontalAlignment="Center">
                                     <TextBlock Text="FRONT RIGHT" Style="{StaticResource ValueLabel}" HorizontalAlignment="Center"/>
                                     <TextBlock Text="{Binding FrPressureOk}"
@@ -77,7 +77,7 @@
                             </Border>
                             <Border Margin="0,0,6,0" Padding="20,16" CornerRadius="10" BorderThickness="1.5"
                                     BorderBrush="{Binding RlPressureOk, Converter={x:Static views:PresenceIsGoodConverter.Instance}}"
-                                    Background="#181818">
+                                    Background="{DynamicResource Bg.CardRaised}">
                                 <StackPanel HorizontalAlignment="Center">
                                     <TextBlock Text="REAR LEFT" Style="{StaticResource ValueLabel}" HorizontalAlignment="Center"/>
                                     <TextBlock Text="{Binding RlPressureOk}"
@@ -88,7 +88,7 @@
                             </Border>
                             <Border Padding="20,16" CornerRadius="10" BorderThickness="1.5"
                                     BorderBrush="{Binding RrPressureOk, Converter={x:Static views:PresenceIsGoodConverter.Instance}}"
-                                    Background="#181818">
+                                    Background="{DynamicResource Bg.CardRaised}">
                                 <StackPanel HorizontalAlignment="Center">
                                     <TextBlock Text="REAR RIGHT" Style="{StaticResource ValueLabel}" HorizontalAlignment="Center"/>
                                     <TextBlock Text="{Binding RrPressureOk}"

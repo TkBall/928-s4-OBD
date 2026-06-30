@@ -2,7 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="clr-namespace:Porsche928Diagnostics.Views"
-             Background="#090909" Foreground="#EEEEEE">
+             Background="{DynamicResource Bg.Page}" Foreground="{DynamicResource Text.Primary}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3"/>
@@ -19,7 +19,7 @@
                     <StackPanel>
                         <TextBlock Text="ECU SESSION" Style="{StaticResource SectionHeader}"/>
                         <Border Style="{StaticResource AlertBanner}">
-                            <TextBlock Foreground="#F59E0B" FontSize="12" TextWrapping="Wrap"
+                            <TextBlock Foreground="{DynamicResource Amber.Text}" FontSize="12" TextWrapping="Wrap"
                                        Text="ℹ MODEL YEAR NOTE — The electronic PSD (Sperrdifferenzial) was standard from MY1990 only. Pre-1990 928 S4s (most 1989 cars, unless factory-optioned) have the mechanical ZF 40% limited-slip diff instead, which has no electronic module to query. No response from this ECU is expected on a pre-1990 car, not a fault."/>
                         </Border>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
@@ -50,9 +50,9 @@
                         <TextBlock Text="HYDRAULIC BLEED PROCEDURE" Style="{StaticResource SectionHeader}"/>
                         <Border Style="{StaticResource DangerBanner}">
                             <StackPanel>
-                                <TextBlock Text="⚠  SAFETY CRITICAL" Foreground="#EF4444"
+                                <TextBlock Text="⚠  SAFETY CRITICAL" Foreground="{DynamicResource Alert.Text}"
                                            FontWeight="SemiBold" FontSize="12" Margin="0,0,0,4"/>
-                                <TextBlock Foreground="#CC8888" FontSize="12" TextWrapping="Wrap"
+                                <TextBlock Foreground="{DynamicResource Text.Secondary}" FontSize="12" TextWrapping="Wrap"
                                            Text="Vehicle must be on a lift with the bleeder screw accessible and the hydraulic reservoir full. Read the instruction manual before starting."/>
                             </StackPanel>
                         </Border>
@@ -65,15 +65,15 @@
                         <!-- Countdown tile — visible only when bleed is active -->
                         <Border Style="{StaticResource ValueTile}"
                                 Visibility="{Binding BleedActive, Converter={StaticResource BoolToVisConverter}}"
-                                BorderBrush="#00E5A0">
+                                BorderBrush="{DynamicResource Accent}">
                             <StackPanel>
-                                <TextBlock Text="BLEED ACTIVE" Style="{StaticResource ValueLabel}" Foreground="#00E5A0"/>
+                                <TextBlock Text="BLEED ACTIVE" Style="{StaticResource ValueLabel}" Foreground="{DynamicResource Accent.Text}"/>
                                 <TextBlock Text="{Binding BleedSecondsRemaining, StringFormat={}{0}s remaining}"
-                                           Style="{StaticResource ValueDisplay}" Foreground="#00E5A0"/>
+                                           Style="{StaticResource ValueDisplay}" Foreground="{DynamicResource Accent.Text}"/>
                                 <ProgressBar Value="{Binding BleedProgressPercent}" Maximum="1.0"
                                              Margin="0,10,0,6" Height="4"
-                                             Foreground="#00E5A0" Background="#1E1E1E"/>
-                                <TextBlock Foreground="#F59E0B" FontSize="12" TextWrapping="Wrap"
+                                             Foreground="{DynamicResource Accent}" Background="{DynamicResource Bg.Input}"/>
+                                <TextBlock Foreground="{DynamicResource Amber.Text}" FontSize="12" TextWrapping="Wrap"
                                            Text="Tighten the bleeder screw before the timer reaches zero."/>
                             </StackPanel>
                         </Border>

@@ -2,7 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="clr-namespace:Porsche928Diagnostics.Views"
-             Background="#090909" Foreground="#EEEEEE">
+             Background="{DynamicResource Bg.Page}" Foreground="{DynamicResource Text.Primary}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3"/>
@@ -19,7 +19,7 @@
                     <StackPanel>
                         <TextBlock Text="ECU SESSION" Style="{StaticResource SectionHeader}"/>
                         <Border Style="{StaticResource AlertBanner}">
-                            <TextBlock Foreground="#F59E0B" FontSize="12" TextWrapping="Wrap"
+                            <TextBlock Foreground="{DynamicResource Amber.Text}" FontSize="12" TextWrapping="Wrap"
                                        Text="ℹ MODEL YEAR NOTE — A driver airbag was optional on 1989 928 S4s and did not become standard until MY1990. If your car wasn't ordered with the option, this ECU will not respond — that's expected, not a fault. From MY1990, UK/RHD cars received a driver-side airbag only — no passenger airbag was ever fitted to RHD cars due to dashboard packaging, so the passenger field below will read empty/false by design."/>
                         </Border>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
@@ -49,7 +49,7 @@
                     <StackPanel>
                         <TextBlock Text="AIRBAG STATUS" Style="{StaticResource SectionHeader}"/>
                         <Border Style="{StaticResource DangerBanner}">
-                            <TextBlock Foreground="#EF9090" FontSize="12" TextWrapping="Wrap"
+                            <TextBlock Foreground="{DynamicResource Alert.Text}" FontSize="12" TextWrapping="Wrap"
                                        Text="⚠  Do not work on the airbag circuit until the capacitor discharge time shown below has elapsed (typically 15–30 minutes after battery disconnect)."/>
                         </Border>
                         <Button Content="Read Airbag Data" Command="{Binding ReadAirbagDataAsyncCommand}"
@@ -63,7 +63,7 @@
                                 <StackPanel>
                                     <TextBlock Text="CAPACITOR DOWNTIME" Style="{StaticResource ValueLabel}"/>
                                     <TextBlock Text="{Binding DowntimeClock}"
-                                               Style="{StaticResource ValueDisplay}" Foreground="#3B82F6"/>
+                                               Style="{StaticResource ValueDisplay}" Foreground="{DynamicResource Info.Text}"/>
                                 </StackPanel>
                             </Border>
                             <Border Grid.Column="1" Style="{StaticResource ValueTile}">
@@ -79,7 +79,7 @@
                         <UniformGrid Columns="3">
                             <Border Margin="0,0,6,0" Padding="14,12" CornerRadius="8" BorderThickness="1.5"
                                     BorderBrush="{Binding DriverBagFired, Converter={x:Static views:BoolToColorConverter.Instance}}"
-                                    Background="#181818">
+                                    Background="{DynamicResource Bg.CardRaised}">
                                 <StackPanel HorizontalAlignment="Center">
                                     <TextBlock Text="DRIVER AIRBAG" Style="{StaticResource ValueLabel}" HorizontalAlignment="Center"/>
                                     <TextBlock Text="{Binding DriverBagFired}"
@@ -90,7 +90,7 @@
                             </Border>
                             <Border Margin="0,0,6,0" Padding="14,12" CornerRadius="8" BorderThickness="1.5"
                                     BorderBrush="{Binding PassengerBagFired, Converter={x:Static views:BoolToColorConverter.Instance}}"
-                                    Background="#181818">
+                                    Background="{DynamicResource Bg.CardRaised}">
                                 <StackPanel HorizontalAlignment="Center">
                                     <TextBlock Text="PASSENGER AIRBAG (not fitted — RHD)" Style="{StaticResource ValueLabel}"
                                                HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
@@ -102,7 +102,7 @@
                             </Border>
                             <Border Padding="14,12" CornerRadius="8" BorderThickness="1.5"
                                     BorderBrush="{Binding SeatbeltFired, Converter={x:Static views:BoolToColorConverter.Instance}}"
-                                    Background="#181818">
+                                    Background="{DynamicResource Bg.CardRaised}">
                                 <StackPanel HorizontalAlignment="Center">
                                     <TextBlock Text="SEATBELT PRETENSIONER" Style="{StaticResource ValueLabel}" HorizontalAlignment="Center"/>
                                     <TextBlock Text="{Binding SeatbeltFired}"

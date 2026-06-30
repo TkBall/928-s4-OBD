@@ -1,18 +1,21 @@
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
 namespace Porsche928Diagnostics.Views;
 
-/// <summary>True = ECU session active → accent green. False = not connected → dark grey.</summary>
+/// <summary>
+/// True = ECU session active → Accent. False = not connected → Border.Default
+/// (visible against the surface at ~3:1, rather than the old near-invisible tone).
+/// </summary>
 public class SessionDotConverter : IValueConverter
 {
     public static readonly SessionDotConverter Instance = new();
 
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        => value is true
-            ? new SolidColorBrush(Color.FromRgb(0, 229, 160))
-            : new SolidColorBrush(Color.FromRgb(45, 45, 45));
+        => Application.Current.TryFindResource(value is true ? "Accent" : "Border.Default") as Brush
+           ?? Brushes.Gray;
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         => throw new NotImplementedException();

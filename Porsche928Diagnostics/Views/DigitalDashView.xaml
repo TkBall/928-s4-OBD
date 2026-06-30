@@ -2,7 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="clr-namespace:Porsche928Diagnostics.Views"
-             Background="#090909" Foreground="#EEEEEE">
+             Background="{DynamicResource Bg.Page}" Foreground="{DynamicResource Text.Primary}">
     <DockPanel>
         <!-- STATUS — pinned to bottom, always visible -->
         <Border DockPanel.Dock="Bottom" Style="{StaticResource StatusBar}" Margin="20,0,20,8">
@@ -18,8 +18,8 @@
             <StackPanel Margin="0,0,0,20">
                 <TextBlock Text="DIGITAL INSTRUMENT CLUSTER"
                            FontFamily="Bahnschrift, Segoe UI" FontSize="20"
-                           Foreground="#EEEEEE" Margin="0,0,0,4"/>
-                <TextBlock Foreground="#777777" FontSize="12" TextWrapping="Wrap"
+                           Foreground="{DynamicResource Text.Primary}" Margin="0,0,0,4"/>
+                <TextBlock Foreground="{DynamicResource Text.Secondary}" FontSize="12" TextWrapping="Wrap"
                            Text="Self-test mode activated by grounding Pin 6 of the 19-pin connector (passenger footwell). No K-Line communication — guided operator procedure only."/>
             </StackPanel>
 
@@ -31,13 +31,13 @@
                                  Margin="0,0,0,14" Height="3"/>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                         <TextBlock Text="{Binding CurrentStep, StringFormat=Step {0}}"
-                                   FontFamily="Bahnschrift, Segoe UI" FontSize="24" Foreground="#00E5A0"/>
+                                   FontFamily="Bahnschrift, Segoe UI" FontSize="24" Foreground="{DynamicResource Accent.Text}"/>
                         <TextBlock Text="{Binding TotalSteps, StringFormat= / {0}}"
-                                   FontFamily="Bahnschrift, Segoe UI" FontSize="24" Foreground="#3D3D3D"/>
+                                   FontFamily="Bahnschrift, Segoe UI" FontSize="24" Foreground="{DynamicResource Text.Muted}"/>
                     </StackPanel>
                     <Border Style="{StaticResource ValueTile}" Margin="0,0,0,14">
                         <TextBlock Text="{Binding CurrentInstruction}"
-                                   FontSize="14" Foreground="#EEEEEE"
+                                   FontSize="14" Foreground="{DynamicResource Text.Primary}"
                                    TextWrapping="Wrap" LineHeight="22"/>
                     </Border>
                     <StackPanel Orientation="Horizontal">
@@ -67,15 +67,12 @@
                                 <Border Margin="0,0,0,6" Padding="14,12" CornerRadius="8" BorderThickness="1">
                                     <Border.Style>
                                         <Style TargetType="Border">
-                                            <Setter Property="Background"  Value="#181818"/>
-                                            <Setter Property="BorderBrush" Value="#222222"/>
+                                            <Setter Property="Background"  Value="{DynamicResource Bg.CardRaised}"/>
+                                            <Setter Property="BorderBrush" Value="{DynamicResource Border.Default}"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsCritical}" Value="True">
-                                                    <Setter Property="Background"  Value="#1A0E08"/>
-                                                    <Setter Property="BorderBrush" Value="#3D2010"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding IsChecked}" Value="True">
-                                                    <Setter Property="Opacity" Value="0.45"/>
+                                                    <Setter Property="Background"  Value="{DynamicResource Bg.Banner.Danger}"/>
+                                                    <Setter Property="BorderBrush" Value="{DynamicResource Border.Banner.Danger}"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -85,15 +82,22 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
+                                        <!-- "Checked" items use strikethrough + muted text instead of
+                                             whole-row opacity, so they stay legible (no compounding
+                                             contrast loss) while still reading as "done". -->
                                         <TextBlock Grid.Column="0" Text="{Binding Text}"
                                                    FontSize="13" TextWrapping="Wrap" VerticalAlignment="Center">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
-                                                    <Setter Property="Foreground" Value="#EEEEEE"/>
+                                                    <Setter Property="Foreground" Value="{DynamicResource Text.Primary}"/>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding IsCritical}" Value="True">
-                                                            <Setter Property="Foreground" Value="#F59E0B"/>
+                                                            <Setter Property="Foreground" Value="{DynamicResource Amber.Text}"/>
                                                             <Setter Property="FontWeight" Value="SemiBold"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsChecked}" Value="True">
+                                                            <Setter Property="Foreground" Value="{DynamicResource Text.Muted}"/>
+                                                            <Setter Property="TextDecorations" Value="Strikethrough"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>

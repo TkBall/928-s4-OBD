@@ -12,8 +12,11 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.*" />
     <PackageReference Include="System.IO.Ports" Version="9.0.*" />
+    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="9.0.*" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Styles\AppStyles.xaml"/>
+    <Resource Include="Theme\Light.xaml"/>
+    <Resource Include="Theme\Dark.xaml"/>
   </ItemGroup>
 </Project>

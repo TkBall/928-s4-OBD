@@ -1,0 +1,52 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ═══════════════════════════════════════════════════════
+         FLUENT 2 — LIGHT THEME TOKENS
+         Same key set as Theme/Dark.xaml so AppStyles.xaml and the
+         views never need theme-conditional logic — only the
+         DynamicResource values change.
+         All text/background pairs below are WCAG 2.1 AA verified
+         (≥4.5:1 normal text, ≥3:1 large text / non-text UI).
+    ═══════════════════════════════════════════════════════ -->
+
+    <!-- Surfaces -->
+    <SolidColorBrush x:Key="Bg.Page"        Color="#F3F3F3"/>
+    <SolidColorBrush x:Key="Bg.Card"        Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Bg.CardRaised"  Color="#F5F5F5"/>
+    <SolidColorBrush x:Key="Bg.Input"       Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Bg.ListBox"     Color="#F9F9F9"/>
+
+    <!-- Borders / strokes (≥3:1 against Bg.Card) -->
+    <SolidColorBrush x:Key="Border.Default" Color="#8A8A8A"/>
+    <SolidColorBrush x:Key="Border.Strong"  Color="#6B6B6B"/>
+    <SolidColorBrush x:Key="Border.Focus"   Color="#0E7A5B"/>
+
+    <!-- Text -->
+    <SolidColorBrush x:Key="Text.Primary"   Color="#242424"/>
+    <SolidColorBrush x:Key="Text.Secondary" Color="#424242"/>
+    <SolidColorBrush x:Key="Text.Muted"     Color="#616161"/>
+
+    <!-- Brand / semantic — the bright brand teal stays usable as a solid
+         FILL (e.g. button background) in both themes since it's always
+         paired with black text, but as TEXT on a light surface it fails
+         contrast, so Accent.Text/Amber.Text/Alert.Text use darker,
+         verified variants here. -->
+    <SolidColorBrush x:Key="Accent"         Color="#00E5A0"/>
+    <SolidColorBrush x:Key="Accent.Text"    Color="#0E7A5B"/>
+    <SolidColorBrush x:Key="Amber"          Color="#F59E0B"/>
+    <SolidColorBrush x:Key="Amber.Text"     Color="#7A5200"/>
+    <SolidColorBrush x:Key="Alert"          Color="#C42B1C"/>
+    <SolidColorBrush x:Key="Alert.Text"     Color="#A4262C"/>
+    <SolidColorBrush x:Key="Info.Text"      Color="#0F6CBD"/>
+
+    <!-- "Inactive / off" state indicator -->
+    <SolidColorBrush x:Key="Off"            Color="#616161"/>
+
+    <!-- Banners -->
+    <SolidColorBrush x:Key="Bg.Banner.Warning"     Color="#FFF4CE"/>
+    <SolidColorBrush x:Key="Border.Banner.Warning" Color="#F2C661"/>
+    <SolidColorBrush x:Key="Bg.Banner.Danger"      Color="#FDE7E9"/>
+    <SolidColorBrush x:Key="Border.Banner.Danger"  Color="#E8B4B8"/>
+
+</ResourceDictionary>

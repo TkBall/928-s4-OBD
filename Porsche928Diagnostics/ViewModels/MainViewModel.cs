@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Porsche928Diagnostics.Modules;
 using Porsche928Diagnostics.Protocol;
+using Porsche928Diagnostics.Theme;
 
 namespace Porsche928Diagnostics.ViewModels;
 
@@ -13,6 +14,16 @@ public partial class MainViewModel : ViewModelBase
     private readonly Iso9141Session _session;
 
     public ObservableCollection<string> AvailablePorts { get; } = [];
+
+    [ObservableProperty]
+    private AppTheme _currentTheme = ThemeService.CurrentPreference;
+
+    [RelayCommand]
+    private void SetTheme(AppTheme theme)
+    {
+        ThemeService.SetPreference(theme);
+        CurrentTheme = theme;
+    }
 
     [ObservableProperty]
     private string? _selectedPort;

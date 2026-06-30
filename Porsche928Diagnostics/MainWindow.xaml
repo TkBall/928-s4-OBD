@@ -2,65 +2,94 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:Porsche928Diagnostics.Views"
+        xmlns:theme="clr-namespace:Porsche928Diagnostics.Theme"
         Title="Porsche 928 K-Line Diagnostic Tool"
-        Height="740" Width="1160"
-        Background="#090909"
-        Foreground="#EEEEEE"
-        FontFamily="Segoe UI"
+        Height="780" Width="1320"
+        Background="{DynamicResource Bg.Page}"
+        Foreground="{DynamicResource Text.Primary}"
+        FontFamily="Segoe UI Variable, Segoe UI"
         FontSize="13">
 
     <DockPanel>
 
-        <!-- ── Connection toolbar ── -->
+        <!-- ── Command bar ── -->
         <Border DockPanel.Dock="Top"
-                Background="#090909"
-                BorderBrush="#1E1E1E"
+                Background="{DynamicResource Bg.Card}"
+                BorderBrush="{DynamicResource Border.Default}"
                 BorderThickness="0,0,0,1"
                 Height="52">
-            <StackPanel Orientation="Horizontal"
+            <Grid Margin="20,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="PORT"
+                               FontSize="10" FontWeight="SemiBold"
+                               Foreground="{DynamicResource Text.Muted}"
+                               VerticalAlignment="Center"
+                               Margin="0,0,8,0"/>
+                    <ComboBox ItemsSource="{Binding AvailablePorts}"
+                              SelectedItem="{Binding SelectedPort}"
+                              Width="100"
+                              IsEnabled="{Binding IsDisconnected}"/>
+                    <Button Content="Refresh"
+                            Command="{Binding RefreshPortsCommand}"
+                            MinWidth="70" Margin="6,0,0,0"/>
+                    <Button Content="Connect"
+                            Command="{Binding ConnectAsyncCommand}"
+                            Style="{StaticResource Btn.Primary}"
+                            MinWidth="88" Margin="6,0,0,0"/>
+                    <Button Content="Disconnect"
+                            Command="{Binding DisconnectCommand}"
+                            Style="{StaticResource Btn.Danger}"
+                            MinWidth="100" Margin="6,0,0,0"/>
+
+                    <Border Width="1" Background="{DynamicResource Border.Default}" Margin="16,10"/>
+
+                    <TextBlock Text="{Binding StatusMessage}"
+                               Style="{StaticResource StatusText}"
+                               VerticalAlignment="Center"
+                               MaxWidth="480"
+                               TextTrimming="CharacterEllipsis"
+                               Foreground="{Binding HasError, Converter={x:Static views:BoolToColorConverter.Instance}}"/>
+
+                    <ProgressBar IsIndeterminate="True"
+                                 Width="80" Height="3"
+                                 Margin="12,0,0,0"
+                                 VerticalAlignment="Center"
+                                 Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisConverter}}"/>
+                </StackPanel>
+
+                <!-- Light / Dark / Auto theme toggle -->
+                <Border Grid.Column="1"
+                        Background="{DynamicResource Bg.CardRaised}"
+                        BorderBrush="{DynamicResource Border.Default}"
+                        BorderThickness="1"
+                        CornerRadius="6"
                         VerticalAlignment="Center"
-                        Margin="20,0">
-
-                <TextBlock Text="PORT"
-                           FontSize="10" FontWeight="SemiBold"
-                           Foreground="#3D3D3D"
-                           VerticalAlignment="Center"
-                           Margin="0,0,8,0"/>
-                <ComboBox ItemsSource="{Binding AvailablePorts}"
-                          SelectedItem="{Binding SelectedPort}"
-                          Width="100"
-                          IsEnabled="{Binding IsDisconnected}"/>
-                <Button Content="Refresh"
-                        Command="{Binding RefreshPortsCommand}"
-                        MinWidth="70" Margin="6,0,0,0"/>
-                <Button Content="Connect"
-                        Command="{Binding ConnectAsyncCommand}"
-                        Style="{StaticResource Btn.Primary}"
-                        MinWidth="88" Margin="6,0,0,0"/>
-                <Button Content="Disconnect"
-                        Command="{Binding DisconnectCommand}"
-                        Style="{StaticResource Btn.Danger}"
-                        MinWidth="100" Margin="6,0,0,0"/>
-
-                <Border Width="1" Background="#1E1E1E" Margin="16,10"/>
-
-                <TextBlock Text="{Binding StatusMessage}"
-                           Style="{StaticResource StatusText}"
-                           VerticalAlignment="Center"
-                           MaxWidth="560"
-                           TextTrimming="CharacterEllipsis"
-                           Foreground="{Binding HasError, Converter={x:Static views:BoolToColorConverter.Instance}}"/>
-
-                <ProgressBar IsIndeterminate="True"
-                             Width="80" Height="3"
-                             Margin="12,0,0,0"
-                             VerticalAlignment="Center"
-                             Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisConverter}}"/>
-            </StackPanel>
+                        Padding="2">
+                    <StackPanel Orientation="Horizontal">
+                        <ToggleButton Content="Light" Style="{StaticResource Btn.ThemeSegment}"
+                                      Command="{Binding SetThemeCommand}"
+                                      CommandParameter="{x:Static theme:AppTheme.Light}"
+                                      IsChecked="{Binding CurrentTheme, Converter={x:Static views:EnumEqualsConverter.Instance}, ConverterParameter={x:Static theme:AppTheme.Light}, Mode=OneWay}"/>
+                        <ToggleButton Content="Dark" Style="{StaticResource Btn.ThemeSegment}"
+                                      Command="{Binding SetThemeCommand}"
+                                      CommandParameter="{x:Static theme:AppTheme.Dark}"
+                                      IsChecked="{Binding CurrentTheme, Converter={x:Static views:EnumEqualsConverter.Instance}, ConverterParameter={x:Static theme:AppTheme.Dark}, Mode=OneWay}"/>
+                        <ToggleButton Content="Auto" Style="{StaticResource Btn.ThemeSegment}"
+                                      Command="{Binding SetThemeCommand}"
+                                      CommandParameter="{x:Static theme:AppTheme.Auto}"
+                                      IsChecked="{Binding CurrentTheme, Converter={x:Static views:EnumEqualsConverter.Instance}, ConverterParameter={x:Static theme:AppTheme.Auto}, Mode=OneWay}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Border>
 
-        <!-- ── Module tabs ── -->
-        <TabControl>
+        <!-- ── Module navigation (Fluent NavigationView-style left rail) ── -->
+        <TabControl TabStripPlacement="Left">
 
             <TabItem>
                 <TabItem.Header>

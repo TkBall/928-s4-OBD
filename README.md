@@ -2,6 +2,8 @@
 
 A Windows desktop application for reading fault codes, live sensor data, and performing actuator tests on the six ECUs fitted to a Porsche 928 S4 via the factory K-Line diagnostic bus.
 
+The interface follows Microsoft's [Fluent 2](https://fluent2.microsoft.design/) design system: a left-hand navigation rail, Light/Dark/Auto theming (Auto follows the Windows "Apps use light/dark mode" setting and updates live), and a color palette verified against WCAG 2.1 AA contrast requirements throughout.
+
 ---
 
 ## Contents

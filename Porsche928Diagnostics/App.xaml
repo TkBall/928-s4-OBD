@@ -4,6 +4,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <!-- Theme/Light.xaml or Theme/Dark.xaml is inserted at index 0 by
+                     ThemeService.Initialize() before MainWindow is constructed. -->
                 <ResourceDictionary Source="Styles/AppStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
